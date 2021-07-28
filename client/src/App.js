@@ -57,6 +57,7 @@ function App() {
     isLoggedIn: true
   })
 
+
   const getMe = () => {
     User.me()
       .then(({ data: me }) => {
@@ -97,7 +98,7 @@ function App() {
   }
 
   function navbar() {
-    if (document.location.pathname !== "/login" && document.location.pathname !== "/signup") {
+    if (document.location.pathname !== "/login" && document.location.pathname !== "/signup" && localStorage.getItem('token')) {
       return (
         <Navbar
           me={meState.me}
@@ -122,66 +123,79 @@ function App() {
           <Route exact path="/login">
             <Login />
           </Route>
-          <Route exact path="/">
-            <main className={classes.content}>
-              <div className={classes.appBarSpacer} />
-                <Container className={classes.container}>
-                  <Dashboard />
-                </Container>
-            </main>
-          </Route>
-          <Route exact path="/About">
-            <main className={classes.content}>
-              <div className={classes.appBarSpacer} />
-                <Container className={classes.container}>
-                  <About />
-                </Container>
-            </main>
-          </Route>
-          <Route path="/projects">
-            <main className={classes.content}>
-              <div className={classes.appBarSpacer} />
-              <Container className={classes.container}>
-                <Projects />
-                </Container>
-            </main>
-          </Route>
-          <Route path="/me">
-            <main className={classes.content}>
-              <div className={classes.appBarSpacer} />
-              <Container className={classes.container}>
-                <Me />
-                </Container>
-            </main>
-          </Route>
-          <Route path="/help">
-            <main className={classes.content}>
-              <div className={classes.appBarSpacer} />
-              <Container className={classes.container}>
-                <Help />
-              </Container>
-            </main>
-          </Route>
-          <Route path="/project/:projectId">
-            <main className={classes.content}>
-              <div className={classes.appBarSpacer} />
-                <Container className={classes.container}>
-                  <Project />
-                </Container>
-            </main>
-          </Route>
-          <Route path="/projectIssue">
-            <main className={classes.content}>
-              <div className={classes.appBarSpacer} />
-              <Container className={classes.container}>
-                <ProjectIssue />
-              </Container>
-            </main>
-          </Route>
+
+          {/* if logged in */}
+          {localStorage.getItem('token') ? (
+            <>
+              <Route exact path="/">
+                <main className={classes.content}>
+                  <div className={classes.appBarSpacer} />
+                  <Container className={classes.container}>
+                    <Dashboard />
+                  </Container>
+                </main>
+              </Route>
+
+              <Route exact path="/About">
+                <main className={classes.content}>
+                  <div className={classes.appBarSpacer} />
+                  <Container className={classes.container}>
+                    <About />
+                  </Container>
+                </main>
+              </Route>
+              <Route path="/projects">
+                <main className={classes.content}>
+                  <div className={classes.appBarSpacer} />
+                  <Container className={classes.container}>
+                    <Projects />
+                  </Container>
+                </main>
+              </Route>
+              <Route path="/me">
+                <main className={classes.content}>
+                  <div className={classes.appBarSpacer} />
+                  <Container className={classes.container}>
+                    <Me />
+                  </Container>
+                </main>
+              </Route>
+              <Route path="/help">
+                <main className={classes.content}>
+                  <div className={classes.appBarSpacer} />
+                  <Container className={classes.container}>
+                    <Help />
+                  </Container>
+                </main>
+              </Route>
+              <Route path="/project/:projectId">
+                <main className={classes.content}>
+                  <div className={classes.appBarSpacer} />
+                  <Container className={classes.container}>
+                    <Project />
+                  </Container>
+                </main>
+              </Route>
+              <Route path="/projectIssue">
+                <main className={classes.content}>
+                  <div className={classes.appBarSpacer} />
+                  <Container className={classes.container}>
+                    <ProjectIssue />
+                  </Container>
+                </main>
+              </Route>
+            </>
+          ) :
+            (
+              <Route exact path="/">
+                <Login />
+              </Route>
+            )}
+
         </Switch>
       </div>
     </Router>
-);
+  );
 }
 
 export default App;
