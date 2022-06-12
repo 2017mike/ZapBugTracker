@@ -89,10 +89,18 @@ router.put(`/projects/:id/addmember`, passport.authenticate('jwt'), (req, res) =
 router.put(`/projects/:id/removemember`, passport.authenticate('jwt'), (req, res) => {
   // console.log('update members for project', req.body._id)
   User.findByIdAndUpdate(req.body._id, { $pull: { projects: req.params.id } })
-    .then(() => Project.findByIdAndUpdate(req.params.id, { $pull: { members: req.body._id } }, { new: true })
-  )
-    .then(project => res.json(project))
-    .catch(err => console.log(err))
+    .then(() =>
+      Project.findByIdAndUpdate(
+        req.params.id,
+        { $pull: { members: req.body._id } },
+        { new: true }
+      ).populate({
+        path: "members",
+        model: "User",
+      })
+    )
+    .then((project) => res.json(project))
+    .catch((err) => console.log(err));
 })
 
 //delete project, non public issues, and members

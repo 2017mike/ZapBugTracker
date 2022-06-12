@@ -142,17 +142,15 @@ const Project = () => {
 
   const [doomedMember, setDoomedMember] = useState('')
 
-  const handleDelete = (e) => {
-    console.log(e.target.parentNode.parentNode.id, 'user id to be deleted')
-    let member=e.target.parentNode.parentNode.id
-    
+  const handleDelete = (memberId) => {
+  
     let id = project._id
     console.log(id, 'this is the project id')
-    
-        ProjectAPI.removeMember(id, {_id: member})
+        //first param is the project dd, second param is the member id
+        ProjectAPI.removeMember(id, {_id: memberId})
           .then((res) => {
-           console.log(res)
-           window.location.reload()
+           console.log(res, 'hi')
+          setMembers([...res.data.members])
           })
           .catch(err => console.error(err))
   }
@@ -199,11 +197,11 @@ const Project = () => {
       .then(res => {
 
         const project = res.data
-        project.issues = res.data.issues.map(issue => ({
-          ...issue,
-          isOpen: false,
-          isArchived: false
-        }))
+        // project.issues = res.data.issues.map(issue => ({
+        //   ...issue,
+        //   isOpen: false,
+        //   isArchived: false
+        // }))
         setStatus({ project })
         setMembers(res.data.members)
         setIssues(
@@ -275,18 +273,18 @@ const Project = () => {
             
             <Grid item xs={12} md={9}>
               <span className="members">Project Members 
-                {project.members.slice(1).map((members) => (
-                  <span id={members._id}>
+                {members.slice(1).map((member) => (
+                  <span id={member._id}>
                     <Chip
-                      key={members.id}
+                      key={member.id}
                       // icon={<FaceIcon />}
                       clickable
-                      label={members.name}
+                      label={member.name}
                       className={classes.memberschip}
-                      onDelete={handleDelete}
+                      onDelete={() =>handleDelete(member._id)}
                       color="default"
                       variant="outlined"
-                      label={members.name}
+                      label={member.name}
                     />
                     </span>
                 ))}
