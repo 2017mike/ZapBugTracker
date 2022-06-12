@@ -64,7 +64,18 @@ router.post('/issues', passport.authenticate('jwt'), (req, res) => {
           let members = data.members
           for (const member of members) {
             User.findByIdAndUpdate(member, { $push: { issues: issue._id } })
-              .then(() => console.log('Issue added to each member of the project!'))
+              .then(() => {    
+              console.log('Issue added to each member of the project!')
+              const promise1 = new Promise((resolve, reject) => {
+              resolve('Success!');
+              });
+
+              promise1.then((value) => {
+              console.log(value);
+                res.json(issue)
+                });
+              }
+              )
               .catch(err => console.log(err))
           }
         })

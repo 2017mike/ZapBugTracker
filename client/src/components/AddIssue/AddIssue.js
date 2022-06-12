@@ -163,10 +163,10 @@ const SetModal = props => {
  
   function handleAddIssue(e) {
     // e.preventDefault();
-    console.clear();
+    // console.clear();
     console.log('come see issueDescription raw', convertToRaw(issueDescription.getCurrentContent()))
     
-    Issue.create({
+    const newIssue = Issue.create({
       title: issueTitle,
       body: convertToRaw(issueDescription.getCurrentContent()),
       priority: issuePriority,
@@ -174,10 +174,11 @@ const SetModal = props => {
       status: 'Open',
       pid: params.projectId
     })
-    window.location.reload()
-    // console.log('issue created')
+    .then(response=> {
+      console.log(response)
+      props.setIssues([...props.issues, response.data]);
+    })
     props.handleClose()
-    window.location.reload()
   }
 
 

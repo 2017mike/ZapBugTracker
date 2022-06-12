@@ -87,22 +87,30 @@ const Project = () => {
   
   // ====================== Modals ======================
   // Modal: Open an issue 
-  // eslint-disable-next-line
   const [openIssue, setIssueOpen] = useState(false);
   const [status, setStatus] = useState({ isLoading: true });
   const [members, setMembers] = useState([])
+  const [issues, setIssues] = useState([])
   const params = useParams();
   const { isLoading, project, err } = status;
 
   const handleIssueOpen = _id => {
-    let issues = status.project.issues
+    // let issues = status.project.issues
 
-    issues = issues.map(issue => {
-      if (_id === issue._id) {
-        issue.isOpen = !issue.isOpen
-      }
-      return issue
-    })
+    // issues.map(issue => {
+    //   if (_id === issue._id) {
+    //     issue.isOpen = !issue.isOpen
+    //   }
+    //   return issue
+    // })
+    setIssues(
+      issues.map((issue) => {
+        if (_id === issue._id) {
+          issue.isOpen = !issue.isOpen;
+        }
+        return issue;
+      })
+    );
     const project = status.project
     project.issues = issues
     setStatus({ project })
@@ -111,8 +119,7 @@ const Project = () => {
   const [archived, setArchived] = useState({ isLoading: true });
 
   const handleIssueArchive = _id => {
-    let issues = status.project.issues
-
+    
     issues = issues.map(issue => {
       if (_id === issue._id) {
         issue.isArchived = !issue.isArchived
@@ -121,6 +128,7 @@ const Project = () => {
     })
     const project = status.project
     project.issues = issues
+    setIssues([...issues])
     setArchived({ project })
   }
 
@@ -141,19 +149,12 @@ const Project = () => {
     let id = project._id
     console.log(id, 'this is the project id')
     
-    // UserAPI.getOneById(member) 
-    //   .then(user  => {
-    //     console.log(user, 'this is user')
         ProjectAPI.removeMember(id, {_id: member})
           .then((res) => {
            console.log(res)
            window.location.reload()
           })
           .catch(err => console.error(err))
-            
-      // }) 
-
-    
   }
 
 
@@ -196,8 +197,7 @@ const Project = () => {
   useEffect(() => {
     ProjectAPI.getById(params.projectId)
       .then(res => {
-        console.clear()
-        console.log('SEE HERE res.data', res.data)
+
         const project = res.data
         project.issues = res.data.issues.map(issue => ({
           ...issue,
@@ -206,7 +206,14 @@ const Project = () => {
         }))
         setStatus({ project })
         setMembers(res.data.members)
-        
+        setIssues(
+          res.data.issues.map((issue) => ({
+            ...issue,
+            isOpen: false,
+            isArchived: false,
+          }))
+        );
+
         
       })
       .catch(err => setStatus({ err: err }))
@@ -331,6 +338,8 @@ const Project = () => {
           </Link>
           <AddIssue
             open={openAddIssue}
+            issues={issues}
+            setIssues={setIssues}
             handleClose={() => setAddIssueOpen(false)}
           />
         </Grid>
@@ -346,7 +355,7 @@ const Project = () => {
                       {column}
                     </Typography>
                     
-                    {project.issues.filter(issue => issue.status === column).map((issueData) => (
+                    {issues.filter(issue => issue.status === column).map((issueData) => (
                       <>
                         <Link onClick={() => handleIssueOpen(issueData._id)}>
                           <Issue
