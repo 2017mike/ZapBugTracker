@@ -95,14 +95,6 @@ const Project = () => {
   const { isLoading, project, err } = status;
 
   const handleIssueOpen = _id => {
-    // let issues = status.project.issues
-
-    // issues.map(issue => {
-    //   if (_id === issue._id) {
-    //     issue.isOpen = !issue.isOpen
-    //   }
-    //   return issue
-    // })
     setIssues(
       issues.map((issue) => {
         if (_id === issue._id) {
@@ -366,6 +358,8 @@ const Project = () => {
                         </Link>
                         
                         <ProjectIssueModal
+                          issues={issues}
+                          setIssues={setIssues}
                           key={issueData._id}
                           id={issueData._id}
                           title={issueData.title}

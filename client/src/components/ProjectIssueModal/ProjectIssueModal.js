@@ -182,7 +182,6 @@ const ProjectModal = props => {
 
   function handleIssuePriority(e) {
     setIssuePriority(e.target.value)
-
   }
 
   function handleIssueStatus(e) {
@@ -193,17 +192,17 @@ const ProjectModal = props => {
   const handleDeleteIssue = () => {
     console.log(props.id, 'this is issue id')
     IssueAPI.delete(props.id)
-      .then(res => console.log(res))
-      window.location.reload()
+      .then(res => {
+        console.log(res)
+        let newIssues = props.issues.filter(issue => 
+          issue._id !== res.data._id
+        )
+        props.setIssues(newIssues)
+      })
       .catch(err => console.log(err))
   }
   
-  
-  const handlePublicTrue = () => {
-    setIssuePublic(true)
-    // console.clear();
-    // console.log('this is the issuePublic before update', issuePublic)
-  }
+
 
   const [issuePublic, setIssuePublic] = useState(true);
   const [showEditTitle, setShowEditTitle] = useState(false)
@@ -220,7 +219,7 @@ const ProjectModal = props => {
         window.location = '/help'
       })
       .catch(err => console.log('Problem in the ProjectIssueModal', err))
-    // window.location.reload()
+
 
   }
 
@@ -231,9 +230,20 @@ const ProjectModal = props => {
     })
       .then(res => {
         console.log('status priority updated - ProjectIssueModal', res)
+
+        let newIssues = props.issues.map(issue=> {
+          if(issue._id !== res.data._id) {
+            return issue
+          }
+          return res.data
+        })
+
+        console.log(newIssues)
+        props.setIssues(newIssues)
+        // props.handleClose()
       })
       .catch(err => console.log('Problem in the ProjectIssueModal', err))
-    window.location.reload()
+
   }
 
   const [replies, setReplies] = useState([]);

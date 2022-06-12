@@ -223,7 +223,7 @@ const CommunityIssueModal = props => {
         console.log('issue allegedly updated - ProjectIssueModal', res)
       })
       .catch(err => console.log('Problem in the ProjectIssueModal', err))
-    // window.location.reload()
+
   }
 
   useEffect(() => {

@@ -59,9 +59,15 @@ router.post('/projects', passport.authenticate('jwt'), (req, res) => {
     .then(project => {
       User.findByIdAndUpdate(req.user._id, { $push: { projects: project._id } })
         .then(() => {
-          Project.findByIdAndUpdate(project._id, { $push: { members: project.owner._id } })
-            .then(() => res.json(project._id))
-            .catch(err => console.log(err))
+          Project.findByIdAndUpdate(project._id, {
+            $push: { members: project.owner._id },
+          })
+            .populate({
+              path: "owner",
+              model: "User",
+            })
+            .then((updatedProject) => res.json(updatedProject))
+            .catch((err) => console.log(err));
         })
         .catch(err => console.log(err))
     })
@@ -78,6 +84,7 @@ router.put(`/projects/:id`, passport.authenticate('jwt'), (req, res) => {
 //add members for project
 router.put(`/projects/:id/addmember`, passport.authenticate('jwt'), (req, res) => {
   // console.log('update members for project', req.body._id)
+  // console.log(req.body)
   User.findByIdAndUpdate(req.body._id, {
     $addToSet: { projects: req.params.id },
   })

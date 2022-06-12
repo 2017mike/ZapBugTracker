@@ -42,8 +42,10 @@ const Projects = () => {
   useEffect(() => {
     UserAPI.me()
       .then(data => {
-        setProjectState(data.data.projects)
+        data=data.data.projects.reverse()
+        setProjectState(data)
         console.log('this is projectState in Projects.js', projectState)
+      
       })
       .catch(err => console.log(err))
   }, [])
@@ -59,6 +61,8 @@ const Projects = () => {
             />
           </Link>
           <NewProjectModal
+            projectState={projectState}
+            setProjectState={setProjectState}
             open={openNewProjectModal}
             handleClose={() => setNewProjectModalOpen(false)}
           />

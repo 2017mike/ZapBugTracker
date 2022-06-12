@@ -60,8 +60,14 @@ const SetModal = props => {
       }
     )
     .then(res => {
+   
+      console.log(res)
+      // props.firstProject? 
+      console.log(props.projectState)
+      props.setProjectState([res.data, ...props.projectState])
+    
       props.handleClose()
-      window.location.reload()
+    
     }) 
   }
 

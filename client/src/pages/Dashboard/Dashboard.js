@@ -154,6 +154,7 @@ const Dashboard = () => {
                 title={projectData.title}
                 description={projectData.description}
                 owner={projectData.owner.name}
+                
               />
             </Link>
           </Grid>
@@ -163,6 +164,9 @@ const Dashboard = () => {
           </Link>
           <NewProjectModal
             open={openNewProjectModal}
+            projectState={projectState}
+            setProjectState={setProjectState}
+            //firstProject is here because newProjectModal is also used in the Projects page. 
             handleClose={() => setNewProjectModalOpen(false)}
           />
         </>}
