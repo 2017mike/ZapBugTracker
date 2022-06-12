@@ -78,11 +78,21 @@ router.put(`/projects/:id`, passport.authenticate('jwt'), (req, res) => {
 //add members for project
 router.put(`/projects/:id/addmember`, passport.authenticate('jwt'), (req, res) => {
   // console.log('update members for project', req.body._id)
-  User.findByIdAndUpdate(req.body._id, { $addToSet: { projects: req.params.id } })
-    .then(() => Project.findByIdAndUpdate(req.params.id, { $addToSet: { members: req.body } }, { new: true })
-  )
-    .then(project => res.json(project))
-    .catch(err => console.log(err))
+  User.findByIdAndUpdate(req.body._id, {
+    $addToSet: { projects: req.params.id },
+  })
+    .then(() =>
+      Project.findByIdAndUpdate(
+        req.params.id,
+        { $addToSet: { members: req.body } },
+        { new: true }
+      ).populate({
+        path: "members",
+        model: "User",
+      })
+    )
+    .then((project) => res.json(project))
+    .catch((err) => console.log(err));
 })
 
 //remove members from project

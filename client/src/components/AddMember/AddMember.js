@@ -122,8 +122,9 @@ const SetModal = props => {
       .then( ({ data: user }) => {
         ProjectAPI.addMember(props.projectId, user)
           .then(res => {
-            console.log(res)
-            window.location.reload()
+            console.log(res, 'its res baby')
+            props.setMembers([...res.data.members])
+            props.handleClose()
           })
           .catch(err => console.log(err))
           

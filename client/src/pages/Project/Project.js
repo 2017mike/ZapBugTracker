@@ -301,6 +301,8 @@ const Project = () => {
                 <AddMember
                   open={openAddMember}
                   handleClose={() => setAddMemberOpen(false)}
+                  members={members}
+                  setMembers={setMembers}
                   projectId={params.projectId}
                 />
               </span>
