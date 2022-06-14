@@ -65,17 +65,44 @@ const Me = props => {
 
   const handleFilterOpen = () => {
     // console.log('filter time')
-    const openIssues = issues.filter(issue => issue.status === 'Open')
+
+    const openIssues = []
+    issues.forEach(issue=> {
+    if(issue.status==='Open'){
+      openIssues.push(issue)
+    }
+    })
+    
+    // issues.filter(issue => issue.status === 'Open')
     setIssues(openIssues)
   }
 
   const handleShowAll = () => {
-    setIssues(issues)
+     UserAPI.me().then((res) => {
+       console.log("this is res", res.data);
+       // my id is res.data._id
+       const project = res.data;
+       project.issues = res.data.issues.map((issues) => ({
+         ...issues,
+         isOpen: false,
+       }));
+       setStatus({ project });
+       res.data.issues.reverse();
+       setIssues(
+         res.data.issues.map((issue) => ({
+           ...issue,
+           isOpen: false,
+           // isArchived: false,
+         }))
+       );
+       // setCurrentIssueState(res.data.issues)
+       setMyId(res.data._id);
+     });
   }
 
   const [projectState, setProjectState] = useState([])
   const [issues, setIssues] = useState([])
-  const [currentIssueState, setCurrentIssueState] = useState([])
+  // const [currentIssueState, setCurrentIssueState] = useState([])
 
   const [myid, setMyId] = useState('');
 
@@ -101,7 +128,7 @@ const Me = props => {
               // isArchived: false,
             }))
           );
-        setCurrentIssueState(res.data.issues)
+        // setCurrentIssueState(res.data.issues)
         setMyId(res.data._id)
       })
       .catch(err => console.log(err))
