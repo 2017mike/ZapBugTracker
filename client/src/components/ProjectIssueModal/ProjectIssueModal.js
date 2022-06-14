@@ -227,16 +227,15 @@ const ProjectModal = props => {
     })
       .then(res => {
         console.log('status priority updated - ProjectIssueModal', res)
-
+        // if(props.issues){
         let newIssues = props.issues.map(issue=> {
           if(issue._id !== res.data._id) {
             return issue
           }
           return res.data
         })
-
-        console.log(newIssues)
         props.setIssues(newIssues)
+      // }
         // props.handleClose()
       })
       .catch(err => console.log('Problem in the ProjectIssueModal', err))
@@ -246,25 +245,14 @@ const ProjectModal = props => {
   const [replies, setReplies] = useState([]);
 
   useEffect(() => {
-    // console.clear()
-    // console.log(props.id)
     IssueAPI.getById(props.id)
     .then((res) => {
       setReplies(res.data.replies)
-      console.log('check out data', res.data)
     })
     .catch(e => console.error(e))
-
-    // setReplies(props.replies)
-    // console.log('PIM replies', props.replies)
-
   }
-    // eslint-disable-next-line
     , [])
 
-  const handleRefresh = () => {
-    window.location.reload()
-  }
   const handleDeleteOpen = () => {
     setDeleteConfirm(true)
   }

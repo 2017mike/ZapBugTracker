@@ -89,6 +89,7 @@ const Project = () => {
   // Modal: Open an issue 
   const [openIssue, setIssueOpen] = useState(false);
   const [status, setStatus] = useState({ isLoading: true });
+  const [projectStatus, setProjectStatus] = useState({ isLoading: true });
   const [members, setMembers] = useState([])
   const [issues, setIssues] = useState([])
   const params = useParams();
@@ -103,26 +104,26 @@ const Project = () => {
         return issue;
       })
     );
-    const project = status.project
-    project.issues = issues
+    // const project = status.project
+    // project.issues = issues
     setStatus({ project })
   }
 
-  const [archived, setArchived] = useState({ isLoading: true });
+  // const [archived, setArchived] = useState({ isLoading: true });
 
-  const handleIssueArchive = _id => {
+  // const handleIssueArchive = _id => {
     
-    issues = issues.map(issue => {
-      if (_id === issue._id) {
-        issue.isArchived = !issue.isArchived
-      }
-      return issue
-    })
-    const project = status.project
-    project.issues = issues
-    setIssues([...issues])
-    setArchived({ project })
-  }
+  //   issues = issues.map(issue => {
+  //     if (_id === issue._id) {
+  //       issue.isArchived = !issue.isArchived
+  //     }
+  //     return issue
+  //   })
+  //   const project = status.project
+  //   project.issues = issues
+  //   setIssues([...issues])
+  //   setArchived({ project })
+  // }
 
   //  Modal: Edit Project
   const [openEditProject, setEditProjectOpen] = useState(false);
@@ -189,18 +190,25 @@ const Project = () => {
       .then(res => {
 
         const project = res.data
+        console.log(res.data);
         // project.issues = res.data.issues.map(issue => ({
         //   ...issue,
         //   isOpen: false,
         //   isArchived: false
         // }))
+        
         setStatus({ project })
+        setProjectStatus({
+          projectTitle: res.data.title,
+          projectDescription: res.data.description
+        })
+      
         setMembers(res.data.members)
         setIssues(
           res.data.issues.map((issue) => ({
             ...issue,
             isOpen: false,
-            isArchived: false,
+            // isArchived: false,
           }))
         );
 
@@ -218,7 +226,7 @@ const Project = () => {
         <Grid item xs={12} md={11}>
           
           <Typography className={classes.projecttitle} variant="h3" component="h2">
-              {project.title}
+              {projectStatus.projectTitle}
           </Typography>
           
         </Grid>
@@ -235,10 +243,11 @@ const Project = () => {
             </Link>
             <EditProjectModal 
               open={openEditProject} 
-              title={project.title}
-              description={project.description}
+              setProjectStatus={setProjectStatus}
+              title={projectStatus.projectTitle}
+              description={projectStatus.projectDescription}
               owner={project.owner.name}
-              members={project.members}
+              members={members}
               handleClose={() => setEditProjectOpen(false)}
             />
           </div>
@@ -305,7 +314,7 @@ const Project = () => {
             <Card>
               <CardContent>
                 <Typography>
-                 {project.description}
+                 {projectStatus.projectDescription}
                 </Typography>
               </CardContent>
             </Card>

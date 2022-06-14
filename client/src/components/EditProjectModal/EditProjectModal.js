@@ -91,19 +91,19 @@ const EditProjectModal = props => {
   const classes = useStyles();
 
   
-  const [status, setStatus] = useState({ isLoading: true });
+  // const [status, setStatus] = useState({ isLoading: true });
   const params = useParams();
   
   const [projectTitle, setProjectTitle] = useState(props.title);
   const [projectDescription, setProjectDescription] = useState(props.description)
 
-  useEffect(() => {
-    ProjectAPI.getById(`${params.projectId}`)
-      .then(res => {
-        setStatus({ project: res.data })
-      })
-      .catch(err => setStatus({ err: err }))
-  }, [])
+  // useEffect(() => {
+  //   ProjectAPI.getById(`${params.projectId}`)
+  //     .then(res => {
+  //       setStatus({ project: res.data })
+  //     })
+  //     .catch(err => setStatus({ err: err }))
+  // }, [])
 
   function handleProjectTitle(e) {
     setProjectTitle(e.target.value)
@@ -121,7 +121,20 @@ const EditProjectModal = props => {
     },
       params.projectId
     )
-    window.location.reload()
+    .then(res=> {
+      console.log(res)
+      if(res.status===200){
+         props.setProjectStatus({
+           ...props.projectStatus,
+           projectTitle,
+           projectDescription,
+         });
+         props.handleClose()
+      } else {
+        alert("there was an error updating your project's information")
+      }
+    })
+
   }
 
   function handleDeleteProject(e) {
