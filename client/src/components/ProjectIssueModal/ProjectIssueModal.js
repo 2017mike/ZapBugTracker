@@ -186,7 +186,6 @@ const ProjectModal = props => {
 
   function handleIssueStatus(e) {
     setIssueStatus(e.target.value)
-    // console.log(e.target.value, 'this is target')
   }
 
   const handleDeleteIssue = () => {
@@ -213,8 +212,6 @@ const ProjectModal = props => {
       isPublic: issuePublic
     })
       .then(res => {
-
-        // console.log('status priority updated - ProjectIssueModal', res)
         handleClose()
         window.location = '/help'
       })
@@ -251,13 +248,14 @@ const ProjectModal = props => {
   useEffect(() => {
     // console.clear()
     // console.log(props.id)
-    // IssueAPI.getById(props.id)
-    // .then((res) => {
-    //   setReplies(res.data.replies)
-    //   console.log('check out data', res.data)
-    // })
-    // .catch(e => console.error(e))
-    setReplies(props.replies)
+    IssueAPI.getById(props.id)
+    .then((res) => {
+      setReplies(res.data.replies)
+      console.log('check out data', res.data)
+    })
+    .catch(e => console.error(e))
+
+    // setReplies(props.replies)
     // console.log('PIM replies', props.replies)
 
   }
@@ -297,6 +295,7 @@ const ProjectModal = props => {
     })
       .then(reply => {
         // console.clear()
+        console.log(reply.data)
         const newReplies = [...replies, reply.data]
         setReplies(newReplies)
         setIssueReply(EditorState.createEmpty())
