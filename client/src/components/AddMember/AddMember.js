@@ -112,7 +112,6 @@ const SetModal = props => {
   })
 
   const handleInputChange = ({ target }) => {
-    // console.log(target.name, target.value)
     setUserState({ ...userState, [target.name]: target.value })
   }
 
@@ -122,12 +121,10 @@ const SetModal = props => {
       .then( ({ data: user }) => {
         ProjectAPI.addMember(props.projectId, user)
           .then(res => {
-            console.log(res, 'its res baby')
             props.setMembers([...res.data.members])
             props.handleClose()
           })
           .catch(err => console.log(err))
-          
         })
         .catch(err => console.log(err))
   }

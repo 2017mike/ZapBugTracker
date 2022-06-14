@@ -44,7 +44,7 @@ router.get('/issues', passport.authenticate('jwt'), (req, res) => {
 
 //create new issue (needs project id)
 router.post('/issues', passport.authenticate('jwt'), (req, res) => {
-  console.log(req.body.body)
+  // console.log(req.body.body)
   Issue.create({
     title: req.body.title,
     body: req.body.body,
@@ -60,29 +60,50 @@ router.post('/issues', passport.authenticate('jwt'), (req, res) => {
       // atm, by default, the project owner is also a Member
       Project.findByIdAndUpdate(req.body.pid, { $push: { issues: issue._id } })
         .then(data => {
-          console.log('data.members', data.members)
-          let members = data.members
+          // console.log("data.members", data.members);
+          let members = data.members;
           for (const member of members) {
             User.findByIdAndUpdate(member, { $push: { issues: issue._id } })
-              .then(() => {    
-              console.log('Issue added to each member of the project!')
-              const promise1 = new Promise((resolve, reject) => {
-              resolve('Success!');
-              });
+              .then(() => {
+                // console.log("Issue added to each member of the project!");
+                // const promise1 = new Promise((resolve, reject) => {
+                // resolve('Success!');
+                // });
 
-              promise1.then((value) => {
-              console.log(value);
-                res.json(issue)
-                });
-              }
-              )
-              .catch(err => console.log(err))
+                // promise1.then((value) => {
+                //  Issue.findById({_id: issue._id})
+                //    .populate("author")
+                //    .populate({
+                //      path: "replies",
+                //      model: "Reply",
+                //      populate: {
+                //        path: "author",
+                //        model: "User",
+                //      },
+                //    })
+                //    .then((newIssue) => res.json(newIssue));
+                //   });
+              })
+              .catch((err) => console.log(err));
           }
+           Issue.findById({_id: issue._id})
+             .populate("author")
+             .populate({
+               path: "replies",
+               model: "Reply",
+               populate: {
+                 path: "author",
+                 model: "User",
+               },
+             })
+             .then((newIssue) => res.json(newIssue));
+
+            });
         })
         .catch(err => console.log(err))
     })
-    .catch(err => console.log(err))
-})
+//     .catch(err => console.log(err))
+// })
 
 //update issue
 router.put(`/issues/:id`, passport.authenticate('jwt'), (req, res) => {

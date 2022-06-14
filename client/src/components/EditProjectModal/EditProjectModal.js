@@ -93,7 +93,6 @@ const EditProjectModal = props => {
   
   const [status, setStatus] = useState({ isLoading: true });
   const params = useParams();
-  // console.log(params, 'these are params');
   
   const [projectTitle, setProjectTitle] = useState(props.title);
   const [projectDescription, setProjectDescription] = useState(props.description)
@@ -101,43 +100,33 @@ const EditProjectModal = props => {
   useEffect(() => {
     ProjectAPI.getById(`${params.projectId}`)
       .then(res => {
-        // console.log(res, 'useEffect response')
-        // setProjectState(data.data.projects)
         setStatus({ project: res.data })
       })
       .catch(err => setStatus({ err: err }))
-    // eslint-disable-next-line
   }, [])
 
   function handleProjectTitle(e) {
-    // console.log(e.target.value)
     setProjectTitle(e.target.value)
   }
 
   function handleProjectDescription(e) {
-    // console.log(e.target.value)
     setProjectDescription(e.target.value)
   }
 
 
   function handleEditProject(e) {
-    // e.preventDefault();
     ProjectAPI.update({
       title: projectTitle,
       description: projectDescription
     },
       params.projectId
     )
-    // console.log('project updated :)')
-    // console.log(projectTitle)
-    // console.log(projectDescription)
     window.location.reload()
   }
 
   function handleDeleteProject(e) {
     e.preventDefault()
     let doomedProject = params.projectId
-    // console.log(doomedProject, 'this project is going to be deleted')
     ProjectAPI.delete(params.projectId)
     window.location = '/'
     }

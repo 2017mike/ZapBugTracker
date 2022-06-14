@@ -137,35 +137,26 @@ const SetModal = props => {
   useEffect(() => {
     ProjectAPI.getById(`${params.projectId}`)
       .then(res => {
-        // console.log(res, 'useEffect response')
-        // setProjectState(data.data.projects)
         setStatus({ project: res.data })
       })
       .catch(err => setStatus({ err: err }))
-      // eslint-disable-next-line
   }, [])
   
   function handleIssueTitle(e) {
-    // console.log(e.target.value)
     setIssueTitle(e.target.value)
   }
 
   function handleIssueDescription(e) {
-    // console.log(e.target.value)
     setIssueDescription(e.target.value)
   }
 
   function handleIssuePriority(e) {
-    // console.log(e.target.value)
+
     setIssuePriority(e.target.value)
   }
 
  
   function handleAddIssue(e) {
-    // e.preventDefault();
-    // console.clear();
-    console.log('come see issueDescription raw', convertToRaw(issueDescription.getCurrentContent()))
-    
     const newIssue = Issue.create({
       title: issueTitle,
       body: convertToRaw(issueDescription.getCurrentContent()),
@@ -175,7 +166,6 @@ const SetModal = props => {
       pid: params.projectId
     })
     .then(response=> {
-      console.log(response)
       props.setIssues([...props.issues, response.data]);
     })
     props.handleClose()

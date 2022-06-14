@@ -324,7 +324,6 @@ const CommunityIssueModal = props => {
                 <List >
               {
                 replies?.length ? replies.map((index, key) => {
-                  // console.log('this is replies index', index)
                   let formatdate = new Date(index.createdAt)
                   let timestamp = formatdate.toLocaleString('en-US', { timeZone: 'PST' })
                   return (

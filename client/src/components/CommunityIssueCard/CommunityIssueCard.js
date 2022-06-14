@@ -61,7 +61,6 @@ const CommunityIssue = props => {
 
   let formatdate = new Date(props.date)
   let timestamp = formatdate.toLocaleString('en-US', { timeZone: 'PST' })
-  // console.log('date in Community Issue Card', timestamp)
 
   return(
     <Card className={classes.root} style={{ borderColor: obj[props.status] }}>

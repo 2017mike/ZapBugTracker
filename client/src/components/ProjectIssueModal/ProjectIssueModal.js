@@ -142,7 +142,7 @@ const useStyles = makeStyles({
 
 const ProjectModal = props => {
   const classes = useStyles();
-
+  // console.log(props)
   const [issueState, setIssueState] = useState({
     title: '',
     body: '',

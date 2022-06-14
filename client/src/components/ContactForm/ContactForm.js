@@ -11,7 +11,6 @@ const ContactForm = props => {
         e.preventDefault();
         emailjs.sendForm('service_8q9l0zs', 'contact_form', e.target, 'user_vZh74YVKSJ1YNAd3JfGIx')
             .then((result) => {
-                console.log('SUCCESS!', result.status, result.text);
             }, (error) => {
                 console.log(error.text);
             });
