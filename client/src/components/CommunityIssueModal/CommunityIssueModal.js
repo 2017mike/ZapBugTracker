@@ -193,8 +193,8 @@ const CommunityIssueModal = props => {
       pid: props.id
     })
     .then(reply => {
-        console.clear()
-        console.log('CIM reply.data', reply.data)
+        // console.clear()
+        // console.log('CIM reply.data', reply.data)
         const newReplies = [...replies, reply.data]
         setReplies(newReplies)
         setIssueReply(EditorState.createEmpty())
@@ -230,7 +230,7 @@ const CommunityIssueModal = props => {
     IssueAPI.getById(props.id)
       .then((res) => {
         setReplies(res.data.replies)
-        console.clear();
+        // console.clear();
         })
       .catch(e => console.error('useEffect error', e))
   }

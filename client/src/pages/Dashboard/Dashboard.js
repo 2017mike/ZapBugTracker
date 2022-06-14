@@ -33,6 +33,7 @@ const useStyles = makeStyles({
 const Dashboard = () => {
   const classes = useStyles();
 
+
   // ===================== Modals =====================
   const [open, setOpen] = useState(false);
 
@@ -86,7 +87,6 @@ const Dashboard = () => {
   const [projectState, setProjectState] = useState([])
   const [issueState, setIssueState] = useState([])
   const [projectIssueState, setProjectIssueState] = useState([])
-
   const [myid, setMyId] = useState('');
 
   const [mooprojectState, setMooProjectState] = useState([])
@@ -108,7 +108,7 @@ const Dashboard = () => {
         }))
         issues.reverse()
         setIssueState(issues)
-        console.clear()
+        
       })
       .catch(err => console.log(err))
     //gets the users info including their issues
@@ -129,7 +129,9 @@ const Dashboard = () => {
         setProjectIssueState(project.issues)
         setProjectState(res.data.projects)
         setMyId(res.data._id)
-        console.clear()
+  
+        // console.clear()
+        
       })
       .catch(err => console.log('useEffect UserAPI.me err', err))
   }, [])
@@ -211,6 +213,8 @@ const Dashboard = () => {
                 isPublic={issueData.isPublic}
                 date={issueData.createdAt}
                 replies={issueData.replies}
+                issues={projectIssueState}
+                setIssues={setProjectIssueState}
                 // authorusername={issueData.author.username}
                 priority={issueData.priority}
                 open={issueData.isOpen}

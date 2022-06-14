@@ -66,11 +66,11 @@ const Me = props => {
   const handleFilterOpen = () => {
     // console.log('filter time')
     const openIssues = issues.filter(issue => issue.status === 'Open')
-    setCurrentIssueState(openIssues)
+    setIssues(openIssues)
   }
 
   const handleShowAll = () => {
-    setCurrentIssueState(issues)
+    setIssues(issues)
   }
 
   const [projectState, setProjectState] = useState([])

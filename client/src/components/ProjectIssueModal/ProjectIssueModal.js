@@ -189,6 +189,7 @@ const ProjectModal = props => {
   }
 
   const handleDeleteIssue = () => {
+  
     console.log(props.id, 'this is issue id')
     IssueAPI.delete(props.id)
       .then(res => {
@@ -197,6 +198,7 @@ const ProjectModal = props => {
           issue._id !== res.data._id
         )
         props.setIssues(newIssues)
+        // props.handleClose()
       })
       .catch(err => console.log(err))
   }
