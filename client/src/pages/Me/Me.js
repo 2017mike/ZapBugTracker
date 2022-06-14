@@ -43,23 +43,19 @@ const Me = props => {
   const [status, setStatus] = useState(false);
   const [openIssue, setIssueOpen] = useState(false);
 
-  const handleIssueOpen = _id => {
-    // console.log('this is plain status', status)
-    let issues = status.project.issues
-
-    // console.log('this is issues set to status', issues)
-    issues = issues.map(issue => {
-      if (_id === issue._id) {
-        issue.isOpen = !issue.isOpen
-      }
-      return issue
-    })
-
-    // console.log('what happens when i click handleIssueOpen', { status })
-    const project = status.project
-    project.issues = issues
-    setStatus({ project })
-  }
+   const handleIssueOpen = (_id) => {
+     setIssues(
+       issues.map((issue) => {
+         if (_id === issue._id) {
+           issue.isOpen = !issue.isOpen;
+         }
+         return issue;
+       })
+     );
+     // const project = status.project
+     // project.issues = issues
+    //  setStatus({ project });
+   };
 
   const handleClose = () => {
     setOpen(false);
@@ -69,16 +65,16 @@ const Me = props => {
 
   const handleFilterOpen = () => {
     // console.log('filter time')
-    const openIssues = issueState.filter(issue => issue.status === 'Open')
+    const openIssues = issues.filter(issue => issue.status === 'Open')
     setCurrentIssueState(openIssues)
   }
 
   const handleShowAll = () => {
-    setCurrentIssueState(issueState)
+    setCurrentIssueState(issues)
   }
 
   const [projectState, setProjectState] = useState([])
-  const [issueState, setIssueState] = useState([])
+  const [issues, setIssues] = useState([])
   const [currentIssueState, setCurrentIssueState] = useState([])
 
   const [myid, setMyId] = useState('');
@@ -98,7 +94,13 @@ const Me = props => {
         }))
         setStatus({ project })
         res.data.issues.reverse()
-        setIssueState(res.data.issues)
+          setIssues(
+            res.data.issues.map((issue) => ({
+              ...issue,
+              isOpen: false,
+              // isArchived: false,
+            }))
+          );
         setCurrentIssueState(res.data.issues)
         setMyId(res.data._id)
       })
@@ -129,7 +131,7 @@ const Me = props => {
       <div>
         <Grid container>
           <Grid item xs={12}>
-            {currentIssueState.filter(issue => issue.author._id === myid).map((issueData) => (
+            {issues.filter(issue => issue.author._id === myid).map((issueData) => (
               <>
                 <Link onClick={() => handleIssueOpen(issueData._id)}>
                   <ProjectIssue
@@ -147,6 +149,8 @@ const Me = props => {
 
                 {/* See Project Page for how to call ProjectIssueModals properly */}
                 <ProjectIssueModal
+                  issues={issues}
+                  setIssues={setIssues}
                   id={issueData._id}
                   title={issueData.title}
                   body={issueData.body}

@@ -108,7 +108,7 @@ router.post('/issues', passport.authenticate('jwt'), (req, res) => {
 //update issue
 router.put(`/issues/:id`, passport.authenticate('jwt'), (req, res) => {
   Issue.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .populate("author")
+    .populate("author pid")
     .then((project) => res.json(project))
     .catch((err) => console.log(err));
 })
